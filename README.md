@@ -7,6 +7,9 @@ Several components are included such as motor, relay, watchdog, temperature and 
 
 ![Broadcast Board](https://raw.githubusercontent.com/mozcelikors/Broadcast_Home_Automation/master/img/broadcast4.png)
 
+## Dependencies
+ESP8266WiFi, PubSubClient, DHT libraries
+
 ## Installation
 Extract to Arduino libraries folder and run the firmware example.
 
