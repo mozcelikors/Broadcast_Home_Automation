@@ -29,7 +29,7 @@ public:
 	void reset(void);
 	void subscribe (PubSubClient* client);
 	void publish (PubSubClient* client, const char* data);
-	void loop (PubSubClient* client, long* now);
+	void loop (PubSubClient* client);
 
 private:
 	DHT* dht = nullptr;
@@ -40,6 +40,7 @@ private:
 	int TEMPERATURESENSOR_PIN;
 	char* TEMPERATURE_TOPIC;
 	char* HUMIDITY_TOPIC;
+	Timer temp_timer;
 };
 
 #endif

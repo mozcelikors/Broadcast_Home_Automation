@@ -67,7 +67,7 @@ void Motor::publish (PubSubClient* client, const char* data)
 		client->publish(MOTOR_FEEDBACK_TOPIC, data);
 }
 
-void Motor::loop (PubSubClient* client, long* now)
+void Motor::loop (PubSubClient* client)
 {
 
 }

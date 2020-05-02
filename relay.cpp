@@ -85,11 +85,11 @@ void Relay::publish (PubSubClient* client, const char* data)
 		client->publish(RELAY_FEEDBACK_TOPIC, data);
 }
 
-void Relay::loop (PubSubClient* client, long* now)
+void Relay::loop (PubSubClient* client)
 {
-	if (millis()-(*now) > 4000)
+	if (relay_timer.getNow()-relay_timer.getRecordedTime() > 4000)
 	{
-	// Broadcast relay status to be in sync with other devices
+		// Broadcast relay status to be in sync with other devices
 		if (RELAY_STATE == 1)
 		{
 			if (client->connected())
@@ -100,6 +100,6 @@ void Relay::loop (PubSubClient* client, long* now)
 			if (client->connected())
 				client->publish(RELAY_FEEDBACK_TOPIC,"0");
 		}
-		*now = millis();
+		relay_timer.recordNow();
 	}
 }

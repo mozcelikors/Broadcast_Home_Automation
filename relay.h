@@ -26,7 +26,7 @@ public:
 	void reset(void);
 	void subscribe (PubSubClient* client);
 	void publish (PubSubClient* client, const char* data);
-	void loop (PubSubClient* client, long* now);
+	void loop (PubSubClient* client);
 
 	// New methods
 	void on(void);
@@ -38,6 +38,7 @@ private:
 	int RELAY_PIN;
 	char* RELAY_TOPIC;
 	char* RELAY_FEEDBACK_TOPIC;
+	Timer relay_timer;
 };
 
 #endif

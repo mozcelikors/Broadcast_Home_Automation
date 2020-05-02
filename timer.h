@@ -7,21 +7,28 @@
  * http://www.gnu.org/licenses/
  *
  * Description:
- *     Broadcast_Home_Automation Pins
+ *     Broadcast_Home_Automation Timer Component
  *
  **/
 
-#ifndef BROADCAST_H
-#define BROADCAST_H
+#ifndef TIMER_H
+#define TIMER_H
 
-#include <Arduino.h>
+#include <broadcast.h>
+#include <broadcast_interface.h>
 
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#include <string.h>
+class Timer {
+public:
+	Timer();
+	~Timer();
+	void recordNow(void);
+	long getRecordedTime(void);
+	long getNow (void);
+	void setRecordedTime(long time);
 
-#include <timer.h>
-
-int BroadcastPin(const int pinOnBoard);
+private:
+	long* now;
+	long now_ = 0;
+};
 
 #endif

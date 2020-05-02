@@ -47,22 +47,6 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 PubSubClient* client_ptr;
 
-// Asynchronous timers for each component, to keep track of time
-long* now_watchdog1;
-long now_watchdog1_ = 0;
-long* now_temp;
-long now_temp_ = 0;
-long* now_relay1;
-long now_relay1_ = 0;
-long* now_relay2;
-long now_relay2_ = 0;
-long* now_relay3;
-long now_relay3_ = 0;
-long* now_motor1;
-long now_motor1_ = 0;
-long* now_motor2;
-long now_motor2_ = 0;
-
 void setup_wifi()
 {
 	delay(10);
@@ -185,14 +169,6 @@ void setup()
 
 	client_ptr = &client;
 
-	now_watchdog1 = &now_watchdog1_;
-	now_temp = &now_temp_;
-	now_relay1 = &now_relay1_;
-	now_relay2 = &now_relay2_;
-	now_relay3 = &now_relay3_;
-	now_motor1 = &now_motor1_;
-	now_motor2 = &now_motor2_;
-
 	watchdog1 = new Watchdog(constructTopic("watchdog"), constructTopic("watchdog_feedback"));
 	relay1 = new Relay(0, constructTopic("relay1"), constructTopic("relay1_feedback"));
 	relay2 = new Relay(1, constructTopic("relay2"), constructTopic("relay2_feedback"));
@@ -264,14 +240,15 @@ void loop()
 	}
 	else
 	{
-		watchdog1->loop(client_ptr, now_watchdog1);
-		relay1->loop(client_ptr, now_relay1);
-		relay2->loop(client_ptr, now_relay2);
-		relay3->loop(client_ptr, now_relay3);
-		temperaturesensor1->loop(client_ptr, now_temp);
-		motor1->loop(client_ptr, now_motor1);
-		motor2->loop(client_ptr, now_motor2);
+		watchdog1->loop(client_ptr);
+		relay1->loop(client_ptr);
+		relay2->loop(client_ptr);
+		relay3->loop(client_ptr);
+		temperaturesensor1->loop(client_ptr);
+		motor1->loop(client_ptr);
+		motor2->loop(client_ptr);
 	}
 
 	client_ptr->loop();
 }
+

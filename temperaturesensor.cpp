@@ -54,7 +54,7 @@ void TemperatureSensor::publish (PubSubClient* client, const char* data)
 
 }
 
-void TemperatureSensor::loop (PubSubClient* client, long* now)
+void TemperatureSensor::loop (PubSubClient* client)
 {
 	if (client->connected())
 	{
@@ -62,7 +62,7 @@ void TemperatureSensor::loop (PubSubClient* client, long* now)
 		//Serial.println(TEMPERATURE);
 		HUMIDITY = dht->readHumidity();
 		//Serial.println(HUMIDITY);
-		if ((PREV_TEMPERATURE != TEMPERATURE || PREV_HUMIDITY != HUMIDITY) || millis()-(*now) > 8000)
+		if ((PREV_TEMPERATURE != TEMPERATURE || PREV_HUMIDITY != HUMIDITY) || temp_timer.getNow()-temp_timer.getRecordedTime() > 8000)
 		{
 			char DHT_TEMP_char[8];
 			char DHT_HUMIDITY_char[8];
@@ -81,8 +81,7 @@ void TemperatureSensor::loop (PubSubClient* client, long* now)
 			PREV_TEMPERATURE = TEMPERATURE;
 			PREV_HUMIDITY = HUMIDITY;
 
-			*now = millis();
-			//Serial.println(*now);
+			temp_timer.recordNow();
 		}
 	}
 }

@@ -23,7 +23,7 @@ public:
 	virtual void reset(void) = 0;
 	virtual void subscribe (PubSubClient* client) = 0;
 	virtual void publish (PubSubClient* client, const char* data) = 0;
-	virtual void loop (PubSubClient* client, long* now) = 0;
+	virtual void loop (PubSubClient* client) = 0;
 };
 
 #endif

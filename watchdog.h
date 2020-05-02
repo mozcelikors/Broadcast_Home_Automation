@@ -26,7 +26,7 @@ public:
 	void reset(void);
 	void subscribe (PubSubClient* client);
 	void publish (PubSubClient* client, const char* data);
-	void loop (PubSubClient* client, long* now);
+	void loop (PubSubClient* client);
 
 private:
 	char* WATCHDOG_TOPIC;

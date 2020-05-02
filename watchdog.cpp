@@ -63,7 +63,7 @@ void Watchdog::publish (PubSubClient* client, const char* data)
 		client->publish(WATCHDOG_FEEDBACK_TOPIC, data);
 }
 
-void Watchdog::loop (PubSubClient* client, long* now)
+void Watchdog::loop (PubSubClient* client)
 {
 
 }
