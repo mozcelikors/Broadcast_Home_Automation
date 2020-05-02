@@ -57,8 +57,8 @@ void Relay::setup(void)
 
 void Relay::reset(void)
 {
-	digitalWrite(RELAY_PIN, LOW);
-	RELAY_STATE = 0;
+	digitalWrite(RELAY_PIN, HIGH);
+	RELAY_STATE = 1;
 }
 
 void Relay::on(void)
