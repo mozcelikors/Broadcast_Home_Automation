@@ -47,8 +47,21 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 PubSubClient* client_ptr;
 
-long* now;
-long now_ = 0;
+// Asynchronous timers for each component, to keep track of time
+long* now_watchdog1;
+long now_watchdog1_ = 0;
+long* now_temp;
+long now_temp_ = 0;
+long* now_relay1;
+long now_relay1_ = 0;
+long* now_relay2;
+long now_relay2_ = 0;
+long* now_relay3;
+long now_relay3_ = 0;
+long* now_motor1;
+long now_motor1_ = 0;
+long* now_motor2;
+long now_motor2_ = 0;
 
 void setup_wifi()
 {
@@ -105,9 +118,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void publish()
 {
 	watchdog1->publish(client_ptr, "1");
-	relay1->publish(client_ptr, "0");
-	relay2->publish(client_ptr, "0");
-	relay3->publish(client_ptr, "0");
+	relay1->publish(client_ptr, "1");
+	relay2->publish(client_ptr, "1");
+	relay3->publish(client_ptr, "1");
 	motor1->publish(client_ptr, "90");
 	motor2->publish(client_ptr, "90");
 }
@@ -171,7 +184,14 @@ void setup()
 #endif
 
 	client_ptr = &client;
-	now = &now_;
+
+	now_watchdog1 = &now_watchdog1_;
+	now_temp = &now_temp_;
+	now_relay1 = &now_relay1_;
+	now_relay2 = &now_relay2_;
+	now_relay3 = &now_relay3_;
+	now_motor1 = &now_motor1_;
+	now_motor2 = &now_motor2_;
 
 	watchdog1 = new Watchdog(constructTopic("watchdog"), constructTopic("watchdog_feedback"));
 	relay1 = new Relay(0, constructTopic("relay1"), constructTopic("relay1_feedback"));
@@ -212,10 +232,21 @@ void reset()
 	temperaturesensor1->reset();
 }
 
+void relays_on()
+{
+  relay1->on();
+  relay2->on();
+  relay3->on();
+}
+
 void loop()
 {
 	if(WiFi.status() != WL_CONNECTED)
 	{
+    // For safety, if WiFi is lost, keep relays on
+    relays_on();
+
+    // Try reconnecting to wifi
 		WiFi.mode(WIFI_STA);
 		WiFi.begin(ssid,password);
 		delay(2000);
@@ -223,19 +254,23 @@ void loop()
 	}
 	else if (!client_ptr->connected())
 	{
+    // For safety, if MQTT server is lost, keep relays on
+    relays_on();
+
+    // Try reconnecting to MQTT server
 		reconnect();
 		delay(2000);
 		reset();
 	}
 	else
 	{
-		watchdog1->loop(client_ptr, now);
-		relay1->loop(client_ptr, now);
-		relay2->loop(client_ptr, now);
-		relay3->loop(client_ptr, now);
-		temperaturesensor1->loop(client_ptr, now);
-		motor1->loop(client_ptr, now);
-		motor2->loop(client_ptr, now);
+		watchdog1->loop(client_ptr, now_watchdog1);
+		relay1->loop(client_ptr, now_relay1);
+		relay2->loop(client_ptr, now_relay2);
+		relay3->loop(client_ptr, now_relay3);
+		temperaturesensor1->loop(client_ptr, now_temp);
+		motor1->loop(client_ptr, now_motor1);
+		motor2->loop(client_ptr, now_motor2);
 	}
 
 	client_ptr->loop();

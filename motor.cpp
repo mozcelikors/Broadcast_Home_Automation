@@ -39,7 +39,8 @@ void Motor::callback(PubSubClient* client, const char* topic, const byte* payloa
 		}
 		data[length]=0;
 
-		client->publish(MOTOR_FEEDBACK_TOPIC, (const char*) data);
+		if (client->connected())
+			client->publish(MOTOR_FEEDBACK_TOPIC, (const char*) data);
 	}
 }
 
@@ -56,12 +57,14 @@ void Motor::reset(void)
 
 void Motor::subscribe (PubSubClient* client)
 {
-	client->subscribe(MOTOR_TOPIC);
+	if (client->connected())
+		client->subscribe(MOTOR_TOPIC);
 }
 
 void Motor::publish (PubSubClient* client, const char* data)
 {
-	client->publish(MOTOR_FEEDBACK_TOPIC, data);
+	if (client->connected())
+		client->publish(MOTOR_FEEDBACK_TOPIC, data);
 }
 
 void Motor::loop (PubSubClient* client, long* now)

@@ -36,7 +36,8 @@ void Watchdog::callback(PubSubClient* client, const char* topic, const byte* pay
 		}
 		data[length]=0;
 
-		client->publish(WATCHDOG_FEEDBACK_TOPIC, (const char*) data);
+		if (client->connected())
+			client->publish(WATCHDOG_FEEDBACK_TOPIC, (const char*) data);
 	}
 }
 
@@ -52,12 +53,14 @@ void Watchdog::reset(void)
 
 void Watchdog::subscribe (PubSubClient* client)
 {
-	client->subscribe(WATCHDOG_TOPIC);
+	if (client->connected())
+		client->subscribe(WATCHDOG_TOPIC);
 }
 
 void Watchdog::publish (PubSubClient* client, const char* data)
 {
-	client->publish(WATCHDOG_FEEDBACK_TOPIC, data);
+	if (client->connected())
+		client->publish(WATCHDOG_FEEDBACK_TOPIC, data);
 }
 
 void Watchdog::loop (PubSubClient* client, long* now)

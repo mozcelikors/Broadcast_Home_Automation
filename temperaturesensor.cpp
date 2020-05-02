@@ -70,9 +70,13 @@ void TemperatureSensor::loop (PubSubClient* client, long* now)
 			dtostrf(TEMPERATURE, 6, 2, DHT_TEMP_char);
 			dtostrf(HUMIDITY, 6, 2, DHT_HUMIDITY_char);
 
-			client->publish(TEMPERATURE_TOPIC,  DHT_TEMP_char);
+			if (client->connected())
+				client->publish(TEMPERATURE_TOPIC,  DHT_TEMP_char);
+
 			delay(100);
-			client->publish(HUMIDITY_TOPIC,     DHT_HUMIDITY_char);
+
+			if (client->connected())
+				client->publish(HUMIDITY_TOPIC,     DHT_HUMIDITY_char);
 
 			PREV_TEMPERATURE = TEMPERATURE;
 			PREV_HUMIDITY = HUMIDITY;

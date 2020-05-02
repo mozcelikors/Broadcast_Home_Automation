@@ -28,6 +28,10 @@ public:
 	void publish (PubSubClient* client, const char* data);
 	void loop (PubSubClient* client, long* now);
 
+	// New methods
+	void on(void);
+	void off(void);
+
 private:
 	int RELAY_STATE;
 	int PREV_RELAY_STATE;
