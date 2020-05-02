@@ -35,14 +35,14 @@ void Relay::callback(PubSubClient* client, const char* topic, const byte* payloa
 		{
 			RELAY_STATE = 1;
 			digitalWrite(RELAY_PIN, HIGH);
-      if (client->connected())
+			if (client->connected())
 				client->publish(RELAY_FEEDBACK_TOPIC,"1");
 		}
 		else
 		{
-      RELAY_STATE = 0;
+      			RELAY_STATE = 0;
 			digitalWrite(RELAY_PIN, LOW);
-      if (client->connected())
+      			if (client->connected())
 				client->publish(RELAY_FEEDBACK_TOPIC,"0");
 		}
 	}
@@ -75,31 +75,31 @@ void Relay::off(void)
 
 void Relay::subscribe (PubSubClient* client)
 {
-  if (client->connected())
-	  client->subscribe(RELAY_TOPIC);
+	if (client->connected())
+		client->subscribe(RELAY_TOPIC);
 }
 
 void Relay::publish (PubSubClient* client, const char* data)
 {
-  if (client->connected())
-	  client->publish(RELAY_FEEDBACK_TOPIC, data);
+	if (client->connected())
+		client->publish(RELAY_FEEDBACK_TOPIC, data);
 }
 
 void Relay::loop (PubSubClient* client, long* now)
 {
-  if (millis()-(*now) > 4000)
-  {
-    // Broadcast relay status to be in sync with other devices
-    if (RELAY_STATE == 1)
-	  {
-      if (client->connected())
-		    client->publish(RELAY_FEEDBACK_TOPIC,"1");
-	  }
-	  else
-	  {
-		  if (client->connected())
-        client->publish(RELAY_FEEDBACK_TOPIC,"0");
-	  }
-    *now = millis();
-  }
+	if (millis()-(*now) > 4000)
+	{
+	// Broadcast relay status to be in sync with other devices
+		if (RELAY_STATE == 1)
+		{
+			if (client->connected())
+				client->publish(RELAY_FEEDBACK_TOPIC,"1");
+		}
+		else
+		{
+			if (client->connected())
+				client->publish(RELAY_FEEDBACK_TOPIC,"0");
+		}
+		*now = millis();
+	}
 }

@@ -234,19 +234,19 @@ void reset()
 
 void relays_on()
 {
-  relay1->on();
-  relay2->on();
-  relay3->on();
+	relay1->on();
+	relay2->on();
+	relay3->on();
 }
 
 void loop()
 {
 	if(WiFi.status() != WL_CONNECTED)
 	{
-    // For safety, if WiFi is lost, keep relays on
-    relays_on();
+		// For safety, if WiFi is lost, keep relays on
+		relays_on();
 
-    // Try reconnecting to wifi
+		// Try reconnecting to wifi
 		WiFi.mode(WIFI_STA);
 		WiFi.begin(ssid,password);
 		delay(2000);
@@ -254,10 +254,10 @@ void loop()
 	}
 	else if (!client_ptr->connected())
 	{
-    // For safety, if MQTT server is lost, keep relays on
-    relays_on();
+		// For safety, if MQTT server is lost, keep relays on
+		relays_on();
 
-    // Try reconnecting to MQTT server
+		// Try reconnecting to MQTT server
 		reconnect();
 		delay(2000);
 		reset();
