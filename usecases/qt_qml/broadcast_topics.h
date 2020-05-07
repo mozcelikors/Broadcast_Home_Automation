@@ -19,7 +19,7 @@
 
 namespace
 {
-	static const QString BROADCAST_TOPIC_START = "mib/";
+	static const QString BROADCAST_TOPIC_START = "broadcast/";
 
 	static const QString RELAY1_TOPIC = "/relay1";
 	static const QString RELAY1_FEEDBACK_TOPIC = "/relay1_feedback";

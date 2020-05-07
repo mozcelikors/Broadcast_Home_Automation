@@ -109,7 +109,8 @@ void publish()
 	motor2->publish(client_ptr, "90");
 }
 
-void subscribe(){
+void subscribe()
+{
 	watchdog1->subscribe(client_ptr);
 	relay1->subscribe(client_ptr);
 	relay2->subscribe(client_ptr);
@@ -157,7 +158,7 @@ char* constructTopic(char* topicEnd)
 	// Surely leaks memory, do not overuse this.
 	char* topic;
 	topic = (char*) malloc(sizeof (char) * (40));
-	sprintf(topic,"mib/%i/%s",DEVICE_ID,topicEnd);
+	sprintf(topic,"broadcast/%i/%s",DEVICE_ID,topicEnd);
 	return topic;
 }
 
@@ -250,5 +251,8 @@ void loop()
 	}
 
 	client_ptr->loop();
+
+	// Provide liveness, avoid starvation of tasks
+	delay(20);
 }
 
