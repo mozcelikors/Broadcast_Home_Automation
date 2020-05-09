@@ -126,11 +126,8 @@ void reconnect() {
 #ifdef DEBUG
 		Serial.print("Attempting MQTT connection...");
 #endif
-		// Create a random client ID
-		String clientId = "BroadcastNode-";
-		clientId += String(random(0xffff), HEX);
 		// Attempt to connect
-		if (client_ptr->connect(clientId.c_str()))
+		if (client_ptr->connect("BroadcastNode1"))
 		{
 #ifdef DEBUG
 			Serial.println("connected");
@@ -191,11 +188,8 @@ void setup()
 	client_ptr->setServer(mqtt_server, 1883);
 	client_ptr->setCallback(callback);
 
-	if (client_ptr->connect("MibNode1"))
-	{
-		publish();
-		subscribe();
-	}
+	/* Attempt MQTT connection */
+	reconnect();
 }
 
 void reset()
@@ -248,11 +242,10 @@ void loop()
 		temperaturesensor1->loop(client_ptr);
 		motor1->loop(client_ptr);
 		motor2->loop(client_ptr);
-	}
 
-	client_ptr->loop();
+		client_ptr->loop();
+	}
 
 	// Provide liveness, avoid starvation of tasks
 	delay(20);
 }
-

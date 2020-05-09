@@ -65,5 +65,6 @@ void Watchdog::publish (PubSubClient* client, const char* data)
 
 void Watchdog::loop (PubSubClient* client)
 {
-
+	if (client->connected())
+		client->loop();
 }

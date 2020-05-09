@@ -102,4 +102,7 @@ void Relay::loop (PubSubClient* client)
 		}
 		relay_timer.recordNow();
 	}
+
+	if (client->connected())
+		client->loop();
 }

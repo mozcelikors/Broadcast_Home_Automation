@@ -83,5 +83,6 @@ void TemperatureSensor::loop (PubSubClient* client)
 
 			temp_timer.recordNow();
 		}
+		client->loop();
 	}
 }

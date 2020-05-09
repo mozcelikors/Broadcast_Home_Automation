@@ -69,5 +69,6 @@ void Motor::publish (PubSubClient* client, const char* data)
 
 void Motor::loop (PubSubClient* client)
 {
-
+	if (client->connected())
+		client->loop();
 }
