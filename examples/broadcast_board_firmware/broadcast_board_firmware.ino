@@ -127,7 +127,7 @@ void reconnect() {
 		Serial.print("Attempting MQTT connection...");
 #endif
 		// Attempt to connect
-		if (client_ptr->connect("BroadcastNode1"))
+		if (client_ptr->connect(String("BroadcastNode-"+DEVICE_ID).c_str()))
 		{
 #ifdef DEBUG
 			Serial.println("connected");
@@ -249,3 +249,4 @@ void loop()
 	// Provide liveness, avoid starvation of tasks
 	delay(20);
 }
+
