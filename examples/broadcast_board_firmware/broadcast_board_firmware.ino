@@ -168,10 +168,10 @@ void setup()
 	client_ptr = &client;
 
 	watchdog1 = new Watchdog(constructTopic("watchdog"), constructTopic("watchdog_feedback"));
-	relay1 = new Relay(0, constructTopic("relay1"), constructTopic("relay1_feedback"));
-	relay2 = new Relay(1, constructTopic("relay2"), constructTopic("relay2_feedback"));
-	relay3 = new Relay(2, constructTopic("relay3"), constructTopic("relay3_feedback"));
-	temperaturesensor1 = new TemperatureSensor(7, constructTopic("temperature"), constructTopic("humidity"));
+	relay1 = new Relay(5, constructTopic("relay1"), constructTopic("relay1_feedback"));
+	relay2 = new Relay(6, constructTopic("relay2"), constructTopic("relay2_feedback"));
+	relay3 = new Relay(7, constructTopic("relay3"), constructTopic("relay3_feedback"));
+	temperaturesensor1 = new TemperatureSensor(2, constructTopic("temperature"), constructTopic("humidity"));
 	motor1 = new Motor(3, constructTopic("motor1"), constructTopic("motor1_feedback"));
 	motor2 = new Motor(3, constructTopic("motor2"), constructTopic("motor2_feedback"));
 
