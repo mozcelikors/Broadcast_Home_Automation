@@ -214,9 +214,9 @@ void reset()
 
 void relays_on()
 {
-	relay1->on();
-	relay2->on();
-	relay3->on();
+	//relay1->on();
+	//relay2->on();
+	//relay3->on();
 }
 
 void loop()
