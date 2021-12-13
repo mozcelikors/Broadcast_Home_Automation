@@ -39,9 +39,12 @@ Motor* motor1;
 Motor* motor2;
 
 // Update these with values suitable for your network.
-const char* ssid = "SUPERONLINE_WiFi_5089";
-const char* password = "UTNJ47YFTFU3";
+const char* ssid = "SUPERONLINE_WiFi_9800";
+const char* password = "fjYzDqE2jgdT";
 const char* mqtt_server = "192.168.1.35"; // This is the static IP for media in the box on home network
+
+unsigned long previous_time = 0;
+unsigned long delaytime = 20000;  // 20 seconds delay
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -58,6 +61,7 @@ void setup_wifi()
 	Serial.println(ssid);
 #endif
 
+  WiFi.mode(WIFI_STA);
 	WiFi.begin(ssid, password);
 
 	while (WiFi.status() != WL_CONNECTED)
@@ -76,6 +80,9 @@ void setup_wifi()
 	Serial.println("IP address: ");
 	Serial.println(WiFi.localIP());
 #endif
+
+ 	WiFi.setAutoReconnect(true);
+	WiFi.persistent(true);
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -119,10 +126,12 @@ void subscribe()
 	motor2->subscribe(client_ptr);
 }
 
-void reconnect() {
+void reconnectmqtt() {
+  int timeout_ctr = 0;
 	// Loop until we're reconnected
-	while (!client_ptr->connected())
+	while (!client_ptr->connected() && timeout_ctr < 10)
 	{
+	timeout_ctr++;
 #ifdef DEBUG
 		Serial.print("Attempting MQTT connection...");
 #endif
@@ -189,7 +198,7 @@ void setup()
 	client_ptr->setCallback(callback);
 
 	/* Attempt MQTT connection */
-	reconnect();
+	reconnectmqtt();
 }
 
 void reset()
@@ -212,15 +221,19 @@ void relays_on()
 
 void loop()
 {
-	if(WiFi.status() != WL_CONNECTED)
+ 	unsigned long current_time = millis(); // number of milliseconds since the upload
+
+	// checking for WIFI connection
+	if ((WiFi.status() != WL_CONNECTED) && (current_time - previous_time >=delaytime))
 	{
 		// For safety, if WiFi is lost, keep relays on
 		relays_on();
-
-		// Try reconnecting to wifi
-		WiFi.mode(WIFI_STA);
-		WiFi.begin(ssid,password);
-		delay(2000);
+#ifdef DEBUG
+		Serial.println("Reconnecting to WIFI network");
+#endif
+		WiFi.disconnect();
+		setup_wifi();
+		previous_time = current_time;
 		reset();
 	}
 	else if (!client_ptr->connected())
@@ -228,10 +241,18 @@ void loop()
 		// For safety, if MQTT server is lost, keep relays on
 		relays_on();
 
+#ifdef DEBUG
+    Serial.println("mqtt server is lost...");
+#endif
+
 		// Try reconnecting to MQTT server
-		reconnect();
+		reconnectmqtt();
 		delay(2000);
 		reset();
+
+#ifdef DEBUG
+    Serial.println("mqtt server is lost... reset");
+#endif
 	}
 	else
 	{
@@ -249,4 +270,3 @@ void loop()
 	// Provide liveness, avoid starvation of tasks
 	delay(20);
 }
-
