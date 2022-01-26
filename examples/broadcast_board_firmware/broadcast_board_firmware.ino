@@ -109,9 +109,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void publish()
 {
 	watchdog1->publish(client_ptr, "1");
-	relay1->publish(client_ptr, "1");
-	relay2->publish(client_ptr, "1");
-	relay3->publish(client_ptr, "1");
+	//relay1->publish(client_ptr, "1");
+	//relay2->publish(client_ptr, "1");
+	//relay3->publish(client_ptr, "1");
 	motor1->publish(client_ptr, "90");
 	motor2->publish(client_ptr, "90");
 }
