@@ -61,25 +61,33 @@ void setup_wifi()
 	Serial.println(ssid);
 #endif
 
-  WiFi.mode(WIFI_STA);
+	WiFi.mode(WIFI_STA);
 	WiFi.begin(ssid, password);
+
+	int timeout_ctr = 0;
 
 	while (WiFi.status() != WL_CONNECTED)
 	{
+		timeout_ctr++;
 		delay(500);
 #ifdef DEBUG
 		Serial.print(".");
 #endif
+		if (timeout_ctr > 10) break;
 	}
 
 	randomSeed(micros());
+	
+	if (timeout_ctr <= 10)
+	{
 
 #ifdef DEBUG
-	Serial.println("");
-	Serial.println("WiFi connected");
-	Serial.println("IP address: ");
-	Serial.println(WiFi.localIP());
+		Serial.println("");
+		Serial.println("WiFi connected");
+		Serial.println("IP address: ");
+		Serial.println(WiFi.localIP());
 #endif
+	}
 
  	WiFi.setAutoReconnect(true);
 	WiFi.persistent(true);
@@ -129,7 +137,7 @@ void subscribe()
 void reconnectmqtt() {
   int timeout_ctr = 0;
 	// Loop until we're reconnected
-	while (!client_ptr->connected() && timeout_ctr < 10)
+	while (!client_ptr->connected() && timeout_ctr < 5)
 	{
 	timeout_ctr++;
 #ifdef DEBUG
